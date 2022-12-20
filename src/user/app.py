@@ -49,9 +49,50 @@ class Users(user_pb2_grpc.UsersServicer):
                     jwt_token = createJWT(request.username,
                                           "sarcasm", True)
 
-        print(jwt_token)
+            print(jwt_token)
         return user_pb2.LoginRsp(jwt_token=jwt_token,
                                  expiration="2020-01-01")
+
+    def Register(self, request, context):
+
+        print("Register request received")
+        print(request.username, request.password)
+        with server.app_context():
+            cur = mysql.connection.cursor()
+            print("Connected to DB")
+
+            res = cur.execute(
+                "select email, password from user where email=%s",
+                (request.username,))
+            print("Query executed")
+            if res > 0:
+                print("User already exists")
+                return user_pb2.RegisterRsp(status=409, message="User already exists")
+            else:
+                print("Inserting user")
+                cur.execute(
+                    "insert into user(email, password) values(%s, %s)",
+                    (request.username, request.password))
+                mysql.connection.commit()
+                print("User inserted")
+                cur.close()
+        return user_pb2.RegisterRsp(status=200, message="User created"
+                                    )
+
+    def Validate(self, request, context):
+
+        print("Validate request received")
+        print(request.jwt_token)
+        with server.app_context():
+            try:
+                jwt_token = jwt.decode(
+                    request.jwt_token, "sarcasm", algorithms=["HS256"])
+                print(jwt_token)
+            except jwt.ExpiredSignatureError:
+                return user_pb2.ValidateRsp(status=401, message="Token expired")
+            except jwt.InvalidTokenError:
+                return user_pb2.ValidateRsp(status=401, message="Invalid token")
+        return user_pb2.ValidateRsp(status=200, message="Valid token",)
 
 
 def createJWT(username, secret, authz):

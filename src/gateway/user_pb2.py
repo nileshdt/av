@@ -13,21 +13,27 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x05users\".\n\x08LoginReq\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"1\n\x08LoginRsp\x12\x11\n\tjwt_token\x18\x01 \x01(\t\x12\x12\n\nexpiration\x18\x02 \x01(\t\"@\n\x0bRegisterReq\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\"\r\n\x0bRegisterRsp2j\n\x05Users\x12+\n\x05Login\x12\x0f.users.LoginReq\x1a\x0f.users.LoginRsp\"\x00\x12\x34\n\x08Register\x12\x12.users.RegisterReq\x1a\x12.users.RegisterRsp\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x05users\"`\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x11\n\tjwt_token\x18\x04 \x01(\t\x12\x12\n\nexpiration\x18\x05 \x01(\t\".\n\x08LoginReq\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"1\n\x08LoginRsp\x12\x11\n\tjwt_token\x18\x01 \x01(\t\x12\x12\n\nexpiration\x18\x02 \x01(\t\"@\n\x0bRegisterReq\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\".\n\x0bRegisterRsp\x12\x0e\n\x06status\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\t\" \n\x0bValidateReq\x12\x11\n\tjwt_token\x18\x01 \x01(\t\"U\n\x0bValidateRsp\x12\x11\n\tjwt_token\x18\x01 \x01(\t\x12\x12\n\nexpiration\x18\x02 \x01(\t\x12\x0e\n\x06status\x18\x03 \x01(\x05\x12\x0f\n\x07message\x18\x04 \x01(\t2\xa0\x01\n\x05Users\x12+\n\x05Login\x12\x0f.users.LoginReq\x1a\x0f.users.LoginRsp\"\x00\x12\x34\n\x08Register\x12\x12.users.RegisterReq\x1a\x12.users.RegisterRsp\"\x00\x12\x34\n\x08Validate\x12\x12.users.ValidateReq\x1a\x12.users.ValidateRsp\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _LOGINREQ._serialized_start=21
-  _LOGINREQ._serialized_end=67
-  _LOGINRSP._serialized_start=69
-  _LOGINRSP._serialized_end=118
-  _REGISTERREQ._serialized_start=120
-  _REGISTERREQ._serialized_end=184
-  _REGISTERRSP._serialized_start=186
-  _REGISTERRSP._serialized_end=199
-  _USERS._serialized_start=201
-  _USERS._serialized_end=307
+  _USER._serialized_start=21
+  _USER._serialized_end=117
+  _LOGINREQ._serialized_start=119
+  _LOGINREQ._serialized_end=165
+  _LOGINRSP._serialized_start=167
+  _LOGINRSP._serialized_end=216
+  _REGISTERREQ._serialized_start=218
+  _REGISTERREQ._serialized_end=282
+  _REGISTERRSP._serialized_start=284
+  _REGISTERRSP._serialized_end=330
+  _VALIDATEREQ._serialized_start=332
+  _VALIDATEREQ._serialized_end=364
+  _VALIDATERSP._serialized_start=366
+  _VALIDATERSP._serialized_end=451
+  _USERS._serialized_start=454
+  _USERS._serialized_end=614
 # @@protoc_insertion_point(module_scope)

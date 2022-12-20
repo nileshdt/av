@@ -24,6 +24,11 @@ class UsersStub(object):
                 request_serializer=user__pb2.RegisterReq.SerializeToString,
                 response_deserializer=user__pb2.RegisterRsp.FromString,
                 )
+        self.Validate = channel.unary_unary(
+                '/users.Users/Validate',
+                request_serializer=user__pb2.ValidateReq.SerializeToString,
+                response_deserializer=user__pb2.ValidateRsp.FromString,
+                )
 
 
 class UsersServicer(object):
@@ -41,6 +46,12 @@ class UsersServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Validate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_UsersServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_UsersServicer_to_server(servicer, server):
                     servicer.Register,
                     request_deserializer=user__pb2.RegisterReq.FromString,
                     response_serializer=user__pb2.RegisterRsp.SerializeToString,
+            ),
+            'Validate': grpc.unary_unary_rpc_method_handler(
+                    servicer.Validate,
+                    request_deserializer=user__pb2.ValidateReq.FromString,
+                    response_serializer=user__pb2.ValidateRsp.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class Users(object):
         return grpc.experimental.unary_unary(request, target, '/users.Users/Register',
             user__pb2.RegisterReq.SerializeToString,
             user__pb2.RegisterRsp.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Validate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/users.Users/Validate',
+            user__pb2.ValidateReq.SerializeToString,
+            user__pb2.ValidateRsp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

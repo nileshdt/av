@@ -3,6 +3,7 @@ package users;
 service Users {
   rpc Login (LoginReq) returns (LoginRsp) {}
   rpc Register (RegisterReq) returns (RegisterRsp) {}
+  rpc Validate (ValidateReq) returns (ValidateRsp) {}
 }
 message User {
   string username = 1;
@@ -29,5 +30,15 @@ message RegisterReq {
 }
 
 message RegisterRsp {
-
+  int32 status = 1;
+  string message = 2;
+}
+message ValidateReq {
+  string jwt_token = 1;
+}
+message ValidateRsp {
+  string jwt_token = 1;
+  string expiration = 2;
+  int32 status = 3;
+  string message = 4;
 }
