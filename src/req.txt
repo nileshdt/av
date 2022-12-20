@@ -1,0 +1,12 @@
+python3 -m venv venv
+source venv/bin/activate
+
+python3 -m pip install grpcio-tools; 
+
+client pip install protobuf
+
+python3 -m grpc_tools.protoc -I./protos --python_out=. --pyi_out=. --grpc_python_out=. ./protos/users.proto
+
+
+
+python3 -m grpc_tools.protoc -I./protos --python_out=. --pyi_out=. --grpc_python_out=. ./protos/user/user.proto
