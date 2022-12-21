@@ -13,12 +13,16 @@ class LoginReq(_message.Message):
     def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
 
 class LoginRsp(_message.Message):
-    __slots__ = ["expiration", "jwt_token"]
+    __slots__ = ["expiration", "jwt_token", "message", "status"]
     EXPIRATION_FIELD_NUMBER: _ClassVar[int]
     JWT_TOKEN_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     expiration: str
     jwt_token: str
-    def __init__(self, jwt_token: _Optional[str] = ..., expiration: _Optional[str] = ...) -> None: ...
+    message: str
+    status: int
+    def __init__(self, jwt_token: _Optional[str] = ..., expiration: _Optional[str] = ..., status: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
 
 class RegisterReq(_message.Message):
     __slots__ = ["email", "password", "username"]
@@ -53,10 +57,14 @@ class User(_message.Message):
     def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ..., email: _Optional[str] = ..., jwt_token: _Optional[str] = ..., expiration: _Optional[str] = ...) -> None: ...
 
 class ValidateReq(_message.Message):
-    __slots__ = ["jwt_token"]
+    __slots__ = ["jwt_token", "message", "status"]
     JWT_TOKEN_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     jwt_token: str
-    def __init__(self, jwt_token: _Optional[str] = ...) -> None: ...
+    message: str
+    status: int
+    def __init__(self, jwt_token: _Optional[str] = ..., status: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
 
 class ValidateRsp(_message.Message):
     __slots__ = ["expiration", "jwt_token", "message", "status"]

@@ -30,9 +30,11 @@ mysql = MySQL(server)
 class Users(user_pb2_grpc.UsersServicer):
 
     def Login(self, request, context):
-
+        if request.username == "" or request.password == "":
+            return user_pb2.LoginRsp(jwt_token="",
+                                     expiration="2020-01-01", status=401, message="Invalid credentials")
         print("Login request received")
-        print(request.username, request.password)
+        print(request.username)
         with server.app_context():
             cur = mysql.connection.cursor()
 
@@ -43,6 +45,8 @@ class Users(user_pb2_grpc.UsersServicer):
                 user_row = cur.fetchone()
                 email = user_row[0]
                 password = user_row[1]
+                print(email, password)
+                print(request.username, request.password)
                 if request.username != email or request.password != password:
                     return "Invalid credentials", 401
                 else:
@@ -50,13 +54,15 @@ class Users(user_pb2_grpc.UsersServicer):
                                           "sarcasm", True)
 
             print(jwt_token)
-        return user_pb2.LoginRsp(jwt_token=jwt_token,
+        return user_pb2.LoginRsp(jwt_token=jwt_token, status=200, message="Login successful",
                                  expiration="2020-01-01")
 
     def Register(self, request, context):
 
         print("Register request received")
         print(request.username, request.password)
+        if request.username == "" or request.password == "":
+            return user_pb2.RegisterRsp(status=400, message="Username or password cannot be empty")
         with server.app_context():
             cur = mysql.connection.cursor()
             print("Connected to DB")
