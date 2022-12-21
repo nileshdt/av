@@ -48,7 +48,7 @@ class UserService:
         :return: validate response
         :rtype: ValidateRsp
         """
-        r = ValidateReq(token=token)
+        r = ValidateReq(jwt_token=token)
 
         # send request to grpc server
         return self.stub.Validate(r)

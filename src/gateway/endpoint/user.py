@@ -22,14 +22,12 @@ def sign_up():
     us = UserService()
 
     # sign up by using username and password
-    res = us.sign_up(auth.username, auth.password)
+    res = us.sign_up(auth.username)
 
     m.statusid = res.status
+    m.message = res.message
     if res.status == 200:
         m.status = True
-    else:
-        m.status = False
-        m.message = res.message
 
     return m.json()
 
@@ -46,7 +44,7 @@ def sign_in():
     auth = request.authorization
     # username = request.args.get('Username')
     # password = request.args.get('Password')
-    print(auth.username, auth.password)
+    print(auth.username)
     us = UserService()
 
     # sign in by using username and password
@@ -56,5 +54,30 @@ def sign_in():
     if res.status == 200:
         m.status = True
         m.token = res.jwt_token
+
+    return m.json()
+
+
+@user.post('/validate')
+def validate():
+    """
+    Validate token
+
+    :rtype: flask.Response
+    """
+    token = request.headers["Authorization"]
+    if not token:
+        return "missing credentials", 401
+    token = token.split(" ")[1]
+
+    m = Message()
+    us = UserService()
+
+    # validate token
+    res = us.validate(token)
+    m.statusid = res.status
+    m.message = res.message
+    if res.status == 200:
+        m.status = True
 
     return m.json()
