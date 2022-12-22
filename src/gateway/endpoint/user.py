@@ -1,13 +1,13 @@
 from flask import Blueprint, request
-from rpc import UserService
+from rpc import UserService, UserServiceConnection
 from server import app
 from server.message import Message
-
+import asyncio
 user = Blueprint('user', app.name)
 
 
 @user.post('/sign-up')
-def sign_up():
+async def sign_up():
     """
     Create new user account
 
@@ -19,10 +19,9 @@ def sign_up():
     # username = request.args.get('Username')
     # password = request.args.get('Password')
     print(auth.username)
-    us = UserService()
 
-    # sign up by using username and password
-    res = us.sign_up(auth.username)
+    async with UserServiceConnection() as us:
+        res = await us.sign_up(auth.username, auth.password)
 
     m.statusid = res.status
     m.message = res.message
@@ -33,7 +32,7 @@ def sign_up():
 
 
 @user.post('/sign-in')
-def sign_in():
+async def sign_in():
     """
     Sign in to user account
 
@@ -48,7 +47,7 @@ def sign_in():
     us = UserService()
 
     # sign in by using username and password
-    res = us.sign_in(auth.username, auth.password)
+    res = await us.sign_in(auth.username, auth.password)
     m.statusid = res.status
     m.message = res.message
     if res.status == 200:
@@ -59,7 +58,7 @@ def sign_in():
 
 
 @user.post('/validate')
-def validate():
+async def validate():
     """
     Validate token
 
@@ -74,7 +73,7 @@ def validate():
     us = UserService()
 
     # validate token
-    res = us.validate(token)
+    res = await us.validate(token)
     m.statusid = res.status
     m.message = res.message
     if res.status == 200:

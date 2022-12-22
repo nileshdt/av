@@ -7,6 +7,32 @@ python3 -m pip install grpcio-tools;
 
 python3 -m grpc_tools.protoc -I./protos --python_out=. --pyi_out=. --grpc_python_out=. ./protos/users.proto
 
-
+pip3 install "grpclib[protobuf]"
 
 python3 -m grpc_tools.protoc -I../protos/user --python_out=. --pyi_out=. --grpc_python_out=. ../protos/user/user.proto
+
+pip3 install contextlib3
+pip3 install "grpclib[protobuf]"
+
+pip3 freeze > requirements.txt
+
+
+python3 -m grpc_tools.protoc -I../protos/user --python_out=. --grpclib_python_out=. ../protos/user/user.proto
+python -tt
+
+python3 -m grpc_tools.protoc -I. --python_out=. --proto_path=../protos/user/user.proto --grpclib_python_out=. ../protos/user/user.proto
+
+export PYTHONPATH=$PYTHONPATH:$(git rev-parse --show-toplevel)/protos
+
+python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/user/user.proto
+
+----helloworld
+export PYTHONPATH=$PYTHONPATH:$(git rev-parse --show-toplevel)/protos
+
+python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/helloworld/helloworld.proto
+python3 -m helloworld.server
+python3 -m helloworld.client
+
+python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/user/user.proto
+python3 -m user.server
+python3 -m user.client

@@ -1,18 +1,25 @@
 import os
 import grpc
+import asyncio
+import contextlib
 from proto.user import (
     UsersStub, LoginReq, LoginRsp, RegisterReq, RegisterRsp, ValidateReq, ValidateRsp
 )
 
 
 class UserService:
-    def __init__(self):
-        host = os.environ.get('USER_HOST', 'localhost:50055')
-        channel = grpc.insecure_channel(host)
+    def _init_(self):  # initializing the object
+        self.host = host = os.environ.get('USER_HOST', 'localhost:50055')
 
-        self.stub = UsersStub(channel)
+    async def _aenter_(self):  # setting up a connection
+        self.conn = await grpc.insecure_channel(self.host)
+        return self.conn
 
-    def sign_up(self, username, password) -> RegisterRsp:
+    async def _aexit_(self, exc_type, exc, tb):  # closing the connection
+        await self.conn.close()
+
+    @contextlib.asynccontextmanager
+    async def sign_up(self, username, password) -> RegisterRsp:
         """
         Create new user account by using username and password
 
@@ -21,12 +28,13 @@ class UserService:
         :return: sign up response
         :rtype: SignUpResponse
         """
+
         r = RegisterReq(username=username, password=password)
-
         # send request to grpc server
-        return self.stub.Register(r)
+        return await self.stub.Register(r)
 
-    def sign_in(self, username, password) -> LoginRsp:
+    @contextlib.asynccontextmanager
+    async def sign_in(self, username, password) -> LoginRsp:
         """
         Sign in to user account by using username and password
 
@@ -35,12 +43,17 @@ class UserService:
         :return: sign in response
         :rtype: SignInResponse
         """
-        r = LoginReq(username=username, password=password)
+        host = os.environ.get('USER_HOST', 'localhost:50055')
+        async with grpc.insecure_channel(host) as channel:
+            self.stub = UsersStub(channel)
+
+            r = LoginReq(username=username, password=password)
 
         # send request to grpc server
-        return self.stub.Login(r)
+        return await self.stub.Login(r)
 
-    def validate(self, token) -> ValidateRsp:
+    @contextlib.asynccontextmanager
+    async def validate(self, token) -> ValidateRsp:
         """
         Validate token
 
@@ -48,7 +61,11 @@ class UserService:
         :return: validate response
         :rtype: ValidateRsp
         """
+        host = os.environ.get('USER_HOST', 'localhost:50055')
+        async with grpc.insecure_channel(host) as channel:
+            self.stub = UsersStub(channel)
+
         r = ValidateReq(jwt_token=token)
 
         # send request to grpc server
-        return self.stub.Validate(r)
+        return await self.stub.Validate(r)

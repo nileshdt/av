@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import user_pb2 as user__pb2
+from . import user_pb2 as user_dot_user__pb2
 
 
 class UsersStub(object):
@@ -16,18 +16,18 @@ class UsersStub(object):
         """
         self.Login = channel.unary_unary(
                 '/users.Users/Login',
-                request_serializer=user__pb2.LoginReq.SerializeToString,
-                response_deserializer=user__pb2.LoginRsp.FromString,
+                request_serializer=user_dot_user__pb2.LoginReq.SerializeToString,
+                response_deserializer=user_dot_user__pb2.LoginRsp.FromString,
                 )
         self.Register = channel.unary_unary(
                 '/users.Users/Register',
-                request_serializer=user__pb2.RegisterReq.SerializeToString,
-                response_deserializer=user__pb2.RegisterRsp.FromString,
+                request_serializer=user_dot_user__pb2.RegisterReq.SerializeToString,
+                response_deserializer=user_dot_user__pb2.RegisterRsp.FromString,
                 )
         self.Validate = channel.unary_unary(
                 '/users.Users/Validate',
-                request_serializer=user__pb2.ValidateReq.SerializeToString,
-                response_deserializer=user__pb2.ValidateRsp.FromString,
+                request_serializer=user_dot_user__pb2.ValidateReq.SerializeToString,
+                response_deserializer=user_dot_user__pb2.ValidateRsp.FromString,
                 )
 
 
@@ -57,18 +57,18 @@ def add_UsersServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Login': grpc.unary_unary_rpc_method_handler(
                     servicer.Login,
-                    request_deserializer=user__pb2.LoginReq.FromString,
-                    response_serializer=user__pb2.LoginRsp.SerializeToString,
+                    request_deserializer=user_dot_user__pb2.LoginReq.FromString,
+                    response_serializer=user_dot_user__pb2.LoginRsp.SerializeToString,
             ),
             'Register': grpc.unary_unary_rpc_method_handler(
                     servicer.Register,
-                    request_deserializer=user__pb2.RegisterReq.FromString,
-                    response_serializer=user__pb2.RegisterRsp.SerializeToString,
+                    request_deserializer=user_dot_user__pb2.RegisterReq.FromString,
+                    response_serializer=user_dot_user__pb2.RegisterRsp.SerializeToString,
             ),
             'Validate': grpc.unary_unary_rpc_method_handler(
                     servicer.Validate,
-                    request_deserializer=user__pb2.ValidateReq.FromString,
-                    response_serializer=user__pb2.ValidateRsp.SerializeToString,
+                    request_deserializer=user_dot_user__pb2.ValidateReq.FromString,
+                    response_serializer=user_dot_user__pb2.ValidateRsp.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -92,8 +92,8 @@ class Users(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/users.Users/Login',
-            user__pb2.LoginReq.SerializeToString,
-            user__pb2.LoginRsp.FromString,
+            user_dot_user__pb2.LoginReq.SerializeToString,
+            user_dot_user__pb2.LoginRsp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -109,8 +109,8 @@ class Users(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/users.Users/Register',
-            user__pb2.RegisterReq.SerializeToString,
-            user__pb2.RegisterRsp.FromString,
+            user_dot_user__pb2.RegisterReq.SerializeToString,
+            user_dot_user__pb2.RegisterRsp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -126,7 +126,7 @@ class Users(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/users.Users/Validate',
-            user__pb2.ValidateReq.SerializeToString,
-            user__pb2.ValidateRsp.FromString,
+            user_dot_user__pb2.ValidateReq.SerializeToString,
+            user_dot_user__pb2.ValidateRsp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
