@@ -17,7 +17,7 @@ class Greeter(GreeterBase):
         await stream.send_message(HelloReply(message=message))
 
 
-async def main(*, host: str = '127.0.0.1', port: int = 50051) -> None:
+async def main(*, host: str = '127.0.0.1', port: int = 50056) -> None:
     server = Server([Greeter()])
     # Note: graceful_exit isn't supported in Windows
     with graceful_exit([server]):

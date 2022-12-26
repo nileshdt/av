@@ -15,7 +15,7 @@ def run():
     print("Will try to greet world ...")
     with grpc.insecure_channel('localhost:50055') as channel:
         stub = user_pb2_grpc.UsersStub(channel)
-        user = "ani@gmail.com"
+        user = "achunilesh@gmail.com"
         pwd = "Welcome.123"
 
         registerResponse = stub.Register(user_pb2.RegisterReq(

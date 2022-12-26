@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from rpc import UserService, UserServiceConnection
+from rpc import UserService
 from server import app
 from server.message import Message
 import asyncio
@@ -20,8 +20,7 @@ async def sign_up():
     # password = request.args.get('Password')
     print(auth.username)
 
-    async with UserServiceConnection() as us:
-        res = await us.sign_up(auth.username, auth.password)
+    res = await us.sign_up(auth.username, auth.password)
 
     m.statusid = res.status
     m.message = res.message
@@ -44,10 +43,8 @@ async def sign_in():
     # username = request.args.get('Username')
     # password = request.args.get('Password')
     print(auth.username)
-    us = UserService()
-
-    # sign in by using username and password
-    res = await us.sign_in(auth.username, auth.password)
+    with UserService() as us:
+        res = await us.sign_in(auth.username, auth.password)
     m.statusid = res.status
     m.message = res.message
     if res.status == 200:

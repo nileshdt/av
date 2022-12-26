@@ -1,6 +1,7 @@
 import json
-from flask import Response
-from util.json import CustomEncoder
+# from flask import Response
+from ..util.json import CustomEncoder
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 
 
 class Message:
@@ -38,7 +39,8 @@ class Message:
 
         # encode json object
         return Response(
-            status=status,
-            response=json.dumps(o, cls=CustomEncoder, ensure_ascii=False),
-            mimetype='application/json; charset=utf-8',
+
+            status_code=status,
+            content=json.dumps(o, cls=CustomEncoder, ensure_ascii=False),
+            headers={"ContentType": "application/json; charset=utf-8"}
         )

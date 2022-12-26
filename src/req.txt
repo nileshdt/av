@@ -27,12 +27,18 @@ export PYTHONPATH=$PYTHONPATH:$(git rev-parse --show-toplevel)/protos
 python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/user/user.proto
 
 ----helloworld
-export PYTHONPATH=$PYTHONPATH:$(git rev-parse --show-toplevel)/protos
+export PYTHONPATH=$PYTHONPATH:$(git rev-parse --show-toplevel)/src
 
 python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/helloworld/helloworld.proto
 python3 -m helloworld.server
 python3 -m helloworld.client
 
+--- user
+python3 -m pip install types-PyMySQL
+
 python3 -m grpc_tools.protoc -I. --python_out=. --grpclib_python_out=. protos/user/user.proto
 python3 -m user.server
 python3 -m user.client
+
+python3 -m gateway.main
+
