@@ -6,6 +6,7 @@ import asyncio
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from ..dependencies import get_token_header
+from oauthlib.oauth2 import TokenExpiredError
 
 router = APIRouter(
     prefix="/auth",
@@ -78,11 +79,24 @@ async def signin(*, username: str, password: str, grant_type: str):
     return m.json()
 
 
-# @app.get("/users/me")
-# async def read_users_me(*, authorization: str = Depends(oauth2_scheme)):
-#     try:
-#         payload = verify_token(authorization)
-#     except TokenExpiredError:
-#         return {"error": "Token has expired"}
-#     user = get_current_user(payload)
-#     return user
+@router.post("/me")
+async def read_me(*, authorization: str = Depends(oauth2_scheme)):
+    # try:
+    #     payload = verify_token(authorization)
+    # except TokenExpiredError:
+    #     return {"error": "Token has expired"}
+    # user = get_current_user(payload)
+
+    m = Message()
+    us = UserService()
+
+    # validate token
+    try:
+        res = await us.validate(authorization)
+    except TokenExpiredError:
+        return {"error": "Token has expired"}
+    m.statusid = res.status
+    m.message = res.message
+    if res.status == 200:
+        m.status = True
+    return m.json()
