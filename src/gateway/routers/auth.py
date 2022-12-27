@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from ..rpc import UserService
+from ..rpc import UserService, UserServiceManager
 from ..server.message import Message
 import asyncio
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -19,8 +19,7 @@ router = APIRouter(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 fake_items_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
-
-us = UserService()
+usm = UserServiceManager("localhost", '50051')
 
 
 class Token(BaseModel):
@@ -49,7 +48,9 @@ async def signup(form_data: OAuth2PasswordRequestForm = Depends()):
     m = Message()
     # auth = request.authorization
     print(form_data.username)
-    res = await us.sign_up(form_data.username, form_data.password)
+    async with usm.open_channel() as usc:
+        us = UserService(usc)
+        res = await us.sign_up(form_data.username, form_data.password)
 
     m.statusid = res.status
     m.message = res.message
@@ -68,8 +69,10 @@ async def signin(*, username: str, password: str, grant_type: str):
     print(username)
     print(password)
 
+    async with usm.open_channel() as usc:
+        us = UserService(usc)
     # sign in by using username and password
-    res = await us.sign_in(username, password)
+        res = await us.sign_in(username, password)
     m.statusid = res.status
     m.message = res.message
     if res.status == 200:
@@ -88,11 +91,13 @@ async def read_me(*, authorization: str = Depends(oauth2_scheme)):
     # user = get_current_user(payload)
 
     m = Message()
-    us = UserService()
+    # us = UserService()
 
     # validate token
     try:
-        res = await us.validate(authorization)
+        async with usm.open_channel() as usc:
+            us = UserService(usc)
+            res = await us.validate(authorization)
     except TokenExpiredError:
         return {"error": "Token has expired"}
     m.statusid = res.status

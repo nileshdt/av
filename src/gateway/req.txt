@@ -4,3 +4,8 @@ source venv/bin/activate
 python3 -m pip install grpcio-tools; 
 
 pip install google.protobuf.pyext._message 
+
+
+---- Fastapi
+
+pip install fastapi
