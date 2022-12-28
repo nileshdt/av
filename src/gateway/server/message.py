@@ -1,5 +1,4 @@
 import json
-# from flask import Response
 from ..util.json import CustomEncoder
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 

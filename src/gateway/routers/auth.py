@@ -19,7 +19,7 @@ router = APIRouter(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 fake_items_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
-usm = UserServiceManager("localhost", '50051')
+usManager = UserServiceManager("localhost", '50051')
 
 
 class Token(BaseModel):
@@ -46,9 +46,8 @@ class UserInDB(User):
 async def signup(form_data: OAuth2PasswordRequestForm = Depends()):
     print("sign up")
     m = Message()
-    # auth = request.authorization
     print(form_data.username)
-    async with usm.open_channel() as usc:
+    async with usManager.open_channel() as usc:
         us = UserService(usc)
         res = await us.sign_up(form_data.username, form_data.password)
 
@@ -69,7 +68,7 @@ async def signin(*, username: str, password: str, grant_type: str):
     print(username)
     print(password)
 
-    async with usm.open_channel() as usc:
+    async with usManager.open_channel() as usc:
         us = UserService(usc)
     # sign in by using username and password
         res = await us.sign_in(username, password)
@@ -84,18 +83,12 @@ async def signin(*, username: str, password: str, grant_type: str):
 
 @router.post("/me")
 async def read_me(*, authorization: str = Depends(oauth2_scheme)):
-    # try:
-    #     payload = verify_token(authorization)
-    # except TokenExpiredError:
-    #     return {"error": "Token has expired"}
-    # user = get_current_user(payload)
 
     m = Message()
-    # us = UserService()
 
     # validate token
     try:
-        async with usm.open_channel() as usc:
+        async with usManager.open_channel() as usc:
             us = UserService(usc)
             res = await us.validate(authorization)
     except TokenExpiredError:
