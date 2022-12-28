@@ -25,8 +25,8 @@ COPY . /app
 
 
 RUN apt-get -y update && apt-get install -y protobuf-compiler && \
-    pip install grpcio-tools && \
+    pip install grpcio-tools git && \
     pip install -r requirements.txt && \
     bash python.sh
 
-ENTRYPOINT python server.py
+ENTRYPOINT python main.py
