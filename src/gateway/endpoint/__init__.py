@@ -1,7 +1,7 @@
-from .article import article
-from .user import user
+# from .article import article
+# from .user import user
 
-__all__ = [
-    'article',
-    'user',
-]
+# __all__ = [
+#     'article',
+#     'user',
+# ]
