@@ -1,5 +1,5 @@
 import json
-from ..util.json import CustomEncoder
+from util.json import CustomEncoder
 from fastapi import Response
 
 

@@ -49,3 +49,18 @@ grpcio
 pip3 install --upgrade pip
 python3 -m pip install --upgrade setuptools
 pip3 install --no-cache-dir  --force-reinstall -Iv grpcio
+
+
+python3 -m grpc_tools.protoc -I./protos/user/ --python_out=./protos/user/ --pyi_out=./protos/user/ --grpclib_python_out=./protos/user/ ./protos/user/user.proto
+
+
+python3 -m grpc_tools.protoc -I./protos/user/ --python_out=./protos/user/ --grpclib_python_out=./protos/user/ ./protos/user/user.proto
+
+
+python3 -m grpc_tools.protoc -I./protos/user/ --pyi_out=./protos/user/ --grpclib_python_out=./protos/user/ ./protos/user/user.proto
+
+
+python3 -m grpc_tools.protoc -I proto --python_out=. -0-grpclib_python_out=./protos/user/ ./protos/user/user.proto
+
+
+python3 -m grpc_tools.protoc -I proto --python_out=. -0-grpclib_python_out=. user.proto

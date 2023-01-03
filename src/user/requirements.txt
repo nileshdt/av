@@ -1,5 +1,4 @@
 grpclib==0.4.3
 protobuf==4.21.12
-protos==0.1.0
 PyJWT==2.6.0
 PyMySQL==1.0.2

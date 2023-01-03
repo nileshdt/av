@@ -18,6 +18,6 @@ ENV PYTHONUNBUFFERED=1
 # RUN pip install -r requirements.txt
 COPY . /app
 
-EXPOSE 50011
+EXPOSE 5001
 
 CMD ["python3", "server.py"]

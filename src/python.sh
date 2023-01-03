@@ -1,7 +1,11 @@
 #!/bin/bash
 
-python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out=. protos/user/user.proto
-
+cd protos/user
+python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out=. user.proto
+cd ..
+cd email
+python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out=. email.proto
+cd ../..
 
 # if [[ $(uname -s) == Darwin* ]];
 # then
@@ -16,5 +20,6 @@ python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out
 #     sed -i 's/from user import/from . import/1' gateway/proto/user/user_pb2.pyi
 # fi
 
-cp -r ./protos/user/*.py* ./gateway/proto/user/
-cp -r ./protos/user/*.py* ./user/proto/user/
+cp -r ./protos/user/*.py* ./gateway/rpc/
+cp -r ./protos/user/*.py* ./user
+cp -r ./protos/email/*.py* ./email

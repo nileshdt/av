@@ -1,11 +1,11 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from ..rpc import UserService, UserServiceManager
-from ..server.message import Message
+from rpc import UserService, UserServiceManager
+from server.message import Message
 import asyncio
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from ..dependencies import get_token_header
+from dependencies import get_token_header
 from oauthlib.oauth2 import TokenExpiredError
 
 router = APIRouter(

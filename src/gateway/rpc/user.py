@@ -1,8 +1,9 @@
 import os
 from grpclib.client import Channel
-from ..proto.user import (
-    UsersStub, LoginReq, LoginRsp, RegisterReq, RegisterRsp, ValidateReq, ValidateRsp
+from user_pb2 import (
+    LoginReq, LoginRsp, RegisterReq, RegisterRsp, ValidateReq, ValidateRsp
 )
+from user_grpc import UsersBase, UsersStub
 import asyncio
 import contextlib
 
@@ -35,33 +36,11 @@ class UserServiceManager:
             c.close()
 
 
-# class UserServiceChannel:
-#     # def __init__(self):
-#     #     with Channel(self.host, self.port) as channel:
-#     #         self.channel = channel
-#     #     return self
-
-#     def __enter__(self):  # setting up a connection
-#         async with Channel(self.host, self.port) as channel:
-#             self.stub = await UsersStub(channel)
-#         return self
-
-#     def __exit__(self):  # setting up a connection
-#         self.stub.close()
-    # async def __aenter__(self):  # setting up a connection
-    #     async with Channel(self.host, self.port) as channel:
-    #         self.stub = await UsersStub(channel)
-    #     return self
-
-    # async def __aexit__(self):  # setting up a connection
-    #     self.stub.close()
-
-
 class UserService:
     def __init__(self, channel):
         print("Initializing the user service")
         self.host = os.environ.get('USER_HOST', 'localhost')
-        self.port = os.environ.get('USER_PORT', '50051')
+        self.port = os.environ.get('USER_PORT', '50052')
         self.stub = UsersStub(channel)
         # with Channel(self.host, self.port) as channel:
         #     self.stub = UsersStub(channel)
