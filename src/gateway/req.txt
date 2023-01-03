@@ -9,3 +9,5 @@ pip install google.protobuf.pyext._message
 ---- Fastapi
 
 pip install fastapi
+
+uvicorn main:app --reload

@@ -21,7 +21,7 @@ MYSQL_USER = os.environ.get("MYSQL_USER", "auth_user")
 MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "Auth123")
 MYSQL_DB = os.environ.get("MYSQL_DB", "auth")
 MYSQL_PORT = os.environ.get("MYSQL_PORT", "3306")
-# MYSQL_PORT = int(MYSQL_PORT)
+MYSQL_PORT = int(MYSQL_PORT)
 
 conn = pymysql.connect(
     host=MYSQL_HOST,
