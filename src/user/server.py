@@ -10,12 +10,6 @@ import pymysql.connections
 from user_pb2 import LoginReq, LoginRsp, RegisterReq, RegisterRsp, ValidateReq, ValidateRsp
 from user_grpc import UsersBase
 
-
-# MYSQL_HOST = 'localhost'
-# MYSQL_DB = 'auth'
-# MYSQL_USER = 'auth_user'
-# MYSQL_PASSWORD = 'Auth123'
-# MYSQL_PORT = '3306'
 MYSQL_HOST = os.environ.get("MYSQL_HOST", "localhost")
 MYSQL_USER = os.environ.get("MYSQL_USER", "auth_user")
 MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "Auth123")
@@ -32,20 +26,6 @@ conn = pymysql.connect(
     charset='utf8mb4',
     cursorclass=pymysql.cursors.DictCursor
 )
-
-# server = Flask(__name__)
-
-# # config
-# # os.environ.get("MYSQL_HOST")
-# server.config["MYSQL_HOST"] = "localhost"
-# # os.environ.get("MYSQL_USER")
-# server.config["MYSQL_USER"] = "auth_user"
-# # os.environ.get("MYSQL_PASSWORD")
-# server.config["MYSQL_PASSWORD"] = "Auth123"
-# server.config["MYSQL_DB"] = "auth"  # os.environ.get("MYSQL_DB")
-# server.config["MYSQL_PORT"] = "3306"  # os.environ.get("MYSQL_PORT")
-# server.config["MYSQL_PORT"] = int(server.config["MYSQL_PORT"])
-# mysql = MySQL(server)
 
 
 class Users(UsersBase):
@@ -79,26 +59,6 @@ class Users(UsersBase):
                 print(jwt_token)
         except Exception as e:
             print(e)
-
-        # with server.app_context():
-        #     cur = mysql.connection.cursor()
-
-        #     res = cur.execute(
-        #         "select email, password from user where email=%s",
-        #         (request.username,))
-        #     if res > 0:
-        #         user_row = cur.fetchone()
-        #         email = user_row[0]
-        #         password = user_row[1]
-        #         print(email, password)
-        #         print(request.username, request.password)
-        #         if request.username != email or request.password != password:
-        #             await stream.send_message(LoginRsp(status=401, message="Invalid credentials"
-        #                                                ))
-        #         else:
-        #             jwt_token = createJWT(request.username,
-        #                                   "sarcasm", True)
-        #     print(jwt_token)
 
         await stream.send_message(LoginRsp(jwt_token=jwt_token, status=200, message="Login successful",
                                            expiration="2020-01-01"))

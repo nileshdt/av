@@ -10,11 +10,6 @@ from audit_pb2 import GetAuditRequest, GetAuditResponse, GetAuditsRequest, GetAu
 from audit_grpc import AuditsBase
 
 
-# MYSQL_HOST = 'localhost'
-# MYSQL_DB = 'auth'
-# MYSQL_USER = 'auth_user'
-# MYSQL_PASSWORD = 'Auth123'
-# MYSQL_PORT = '3306'
 MONGODB_HOST = os.environ.get("MONGODBHOST", "mongodb://localhost:27017/")
 MONGODB_USER = os.environ.get("MONGODB_USER", "auth_user")
 MONGODB_PASSWORD = os.environ.get("MONGODB_PASSWORD", "Auth123")
@@ -35,11 +30,13 @@ audits_collection = db[MONGODB_COLLECTION]
 class Audits(AuditsBase):
 
     async def CreateAudit(self, stream: Stream[CreateAuditRequest, CreateAuditResponse]) -> None:
+        print("Create audit request received")
         request = await stream.recv_message()
         assert request is not None
         if request.name == "" or request.data == "":
             await stream.send_message(CreateAuditResponse(status=401, message="Invalid data"))
         try:
+            print("Create request received")
             newAudit = {
                 "name": request.name,
                 "description": request.description,
@@ -50,14 +47,16 @@ class Audits(AuditsBase):
                 "created_by": request.created_by,
             }
             audits_collection.insert_one(newAudit)
-            await stream.send_message(
+            print("Audit created successfully")
+            return await stream.send_message(
                 CreateAuditResponse(status=200, message="Audit created successfully"))
         except Exception as e:
             print(e)
+            print("Internal error")
             await stream.send_message(CreateAuditResponse(status=500, message="Internal error"))
 
     async def UpdateAudit(self, stream: Stream[UpdateAuditRequest, UpdateAuditResponse]) -> None:
-        print("Register request received")
+        print("Update audit request received")
         request = await stream.recv_message()
         assert request is not None
 
@@ -66,9 +65,10 @@ class Audits(AuditsBase):
             # Update the age of the customer with name "John Smith"
         audits_collection.update_one(
             {"id": request.id},
-            {"$set": {"age": 31, "data": request.data, "name": request.name, "description": request.description, "type": request.type,
+            {"$set": {"data": request.data, "name": request.name, "description": request.description, "type": request.type,
                       "status": request.status, "updated_at": datetime.datetime.utcnow(), "updated_by": request.updated_by}}
         )
+        print("Audit updated successfully")
         return await stream.send_message(UpdateAuditResponse(status=200, message="User created"))
 
     async def GetAudit(self, stream: Stream[GetAuditRequest, GetAuditResponse]) -> None:
@@ -91,6 +91,7 @@ class Audits(AuditsBase):
             await stream.send_message(GetAuditsResponse(status=400, message="created_by cannot be empty"))
             # Update the age of the customer with name "John Smith"
         audits = audits_collection.find({"created_by": request.created_by})
+        print(audits)
         return await stream.send_message(GetAuditsResponse(status=200, message="Audits found", audits=audits))
 
     async def DeleteAudit(self, stream: Stream[DeleteAuditRequest, DeleteAuditResponse]) -> None:

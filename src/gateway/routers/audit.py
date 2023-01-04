@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from rpc import UserService, UserServiceManager, AuditServiceManager
+from rpc import AuditService,  AuditServiceManager
 from server.message import Message
 import asyncio
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -18,26 +18,53 @@ router = APIRouter(
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-auManager = AuditServiceManager("localhost", '50051')
+auManager = AuditServiceManager("localhost", '50053')
 
 
-@router.post("/token")
-async def signin(*, username: str, password: str, grant_type: str):
-    if grant_type != "password":
+@router.get("/")
+async def read_audits(user_id: str):
+    async with auManager.open_channel() as usc:
+        us = AuditService(usc)
+        print("get audits")
+    return us.getAudits(user_id)
+
+
+@router.get("/{audit_id}")
+async def read_audit(audit_id: str):
+    async with auManager.open_channel() as usc:
+        us = AuditService(usc)
+    return us.getAudits(audit_id)
+
+
+@router.post("/")
+async def create(*, name: str, description: str,  type: str, status: str, data: str, user_id: str):
+    if not name:
         return {"error": "Unsupported grant type"}
     m = Message()
     print("sign in")
-    print(username)
-    print(password)
-
     async with auManager.open_channel() as usc:
-        us = UserService(usc)
-    # sign in by using username and password
-        res = await us.sign_in(username, password)
+        us = AuditService(usc)
+
+    res = await us.addAudit(name, description, type, status, data, user_id)
     m.statusid = res.status
     m.message = res.message
     if res.status == 200:
         m.status = True
-        m.token = res.jwt_token
+    return m.json()
 
+
+@router.put("/")
+async def update(*, id: str, name: str, description: str, type: str, status: str, data: str, user_id: str):
+    if not name:
+        return {"error": "Unsupported grant type"}
+    m = Message()
+    print("sign in")
+    async with auManager.open_channel() as usc:
+        us = AuditService(usc)
+
+    res = await us.updateAudit(id, name, description, type, status, data, user_id)
+    m.statusid = res.status
+    m.message = res.message
+    if res.status == 200:
+        m.status = True
     return m.json()
