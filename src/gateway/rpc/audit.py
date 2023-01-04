@@ -41,16 +41,16 @@ class AuditService:
 
     async def addAudit(self, name, description, status, type, data, userid) -> CreateAuditResponse:
         """
-        Create new user account by using username and password
-
-        :param str username: user name
-        :param str password: password
+        Add new audit by using audit name, description, status, type, data and user id
+        :param str name: audit name
+        :param str description: audit description
+        :param str status: audit status
+        :param str type: audit type
+        :param str data: audit data
+        :param str userid: user id
         :return: sign up response
         :rtype: SignUpResponse
         """
-        # send request to grpc server
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
         return await self.stub.CreateAudit(
             CreateAuditRequest(name=name,
                                description=description,  type=type, status=status, data=data, created_by=userid
@@ -58,65 +58,61 @@ class AuditService:
 
     async def getAudit(self, auditid) -> GetAuditResponse:
         """
-        Create new user account by using username and password
+        Get audit details by using audit id
 
-        :param str username: user name
-        :param str password: password
-        :return: sign up response
-        :rtype: SignUpResponse
+        :param str username: audit id
+        :return: Get audit response
+        :rtype: GetAuditResponse
         """
-        # send request to grpc server
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
-        return await self.stub.GetAudit(
-            GetAuditRequest(id=auditid
+
+        print("get audit 1" + auditid)
+        res = await self.stub.GetAudit(
+            GetAuditRequest(_id=auditid
                             ))
+        print(res.status, res.message, res.audit)
+        return res
 
     async def getAudits(self, userid) -> GetAuditsResponse:
         """
-        Create new user account by using username and password
+        Get audit details by using user id
 
-        :param str username: user name
-        :param str password: password
-        :return: sign up response
-        :rtype: SignUpResponse
+        :param str username: user id
+        :return: Get audit response
+        :rtype: GetAuditsResponse
         """
-        # send request to grpc server
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
         return await self.stub.GetAudits(
             GetAuditsRequest(created_by=userid
                              ))
 
     async def updateAudit(self, auditid, name, description, status, type, data, userid) -> UpdateAuditResponse:
         """
-        Create new user account by using username and password
+        update audit by using audit id, name, description, status, type, data and user id
 
-        :param str username: user name
-        :param str password: password
+        :param str auditid: audit id
+        :param str name: audit name
+        :param str description: audit description
+        :param str status: audit status
+        :param str type: audit type
+        :param str data: audit data
+        :param str userid: user id
         :return: sign up response
-        :rtype: SignUpResponse
         """
-        # send request to grpc server
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
         return await self.stub.UpdateAudit(
-            UpdateAuditRequest(id=auditid, name=name,
+            UpdateAuditRequest(_id=auditid, name=name,
                                description=description, status=status, type=type, created_by=userid
                                ))
 
     async def deleteAudit(self, auditid) -> DeleteAuditResponse:
         """
-        Create new user account by using username and password
+        Delete audit by using audit id
 
-        :param str username: user name
-        :param str password: password
-        :return: sign up response
-        :rtype: SignUpResponse
+        :param str auditid: audit id
+        :return DeleteAuditResponse
+        :rtype: DeleteAuditResponse
         """
         # send request to grpc server
         # async with Channel(self.host, self.port) as channel:
         #     self.stub = UsersStub(channel)
         return await self.stub.DeleteAudit(
-            DeleteAuditRequest(id=auditid
+            DeleteAuditRequest(_id=auditid
                                ))

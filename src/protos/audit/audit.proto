@@ -10,7 +10,7 @@ service Audits {
 }
 
 message Audit{
-  string id = 1;
+  string _id = 1;
   string name = 2;
   string description = 3;
   string data = 4;
@@ -25,7 +25,7 @@ message Audit{
 
 }
 message GetAuditsRequest {
-  string id = 1;
+  string _id = 1;
   string name = 2;
   string description = 3;
   string data = 4;
@@ -44,7 +44,7 @@ message GetAuditsResponse {
   string message = 3;
 }
 message GetAuditRequest {
-  string id = 1;
+  string _id = 1;
 }
 message GetAuditResponse {
   Audit audit = 1;
@@ -70,7 +70,7 @@ message CreateAuditResponse {
   string message = 3;
 }
 message UpdateAuditRequest {
-  string id = 1;
+  string _id = 1;
   string name = 2;
   string description = 3;
   string data = 4;
@@ -91,7 +91,7 @@ message UpdateAuditResponse {
 
 }
 message DeleteAuditRequest {
-  string id = 1;
+  string _id = 1;
 }
 message DeleteAuditResponse {
   int32 status = 2;

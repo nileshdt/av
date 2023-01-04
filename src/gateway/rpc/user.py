@@ -75,9 +75,6 @@ class UserService:
         :return: sign up response
         :rtype: SignUpResponse
         """
-        # send request to grpc server
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
         return await self.stub.Register(RegisterReq(username=username, password=password))
 
     async def sign_in(self, username, password) -> LoginRsp:
@@ -89,17 +86,7 @@ class UserService:
         :return: sign in response
         :rtype: SignInResponse
         """
-        # host = os.environ.get('USER_HOST', 'localhost:50055')
-        # async with grpc.insecure_channel(host) as channel:
-        #     self.stub = UsersStub(channel)
-
-        # send request to grpc server
         print("username: ", username)
-        print("password: ", password)
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
-        # async with Channel(self.host, self.port) as channel:
-        #     self.stub = UsersStub(channel)
         return await self.stub.Login(LoginReq(username=username, password=password))
 
     async def validate(self, token) -> ValidateRsp:
