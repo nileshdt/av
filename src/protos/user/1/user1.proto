@@ -1,0 +1,48 @@
+syntax = "proto3";
+package users;
+service Users {
+  rpc Login (LoginReq) returns (LoginRsp) {}
+  rpc Register (RegisterReq) returns (RegisterRsp) {}
+  rpc Validate (ValidateReq) returns (ValidateRsp) {}
+}
+message User {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  string jwt_token = 4;
+  string expiration = 5;
+}
+
+message LoginReq {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginRsp {
+  string jwt_token = 1;
+  string expiration = 2;
+  int32 status = 3;
+  string message = 4;
+}
+
+message RegisterReq {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+}
+
+message RegisterRsp {
+  int32 status = 1;
+  string message = 2;
+}
+message ValidateReq {
+  string jwt_token = 1;
+  int32 status = 2;
+  string message = 3;
+}
+message ValidateRsp {
+  string jwt_token = 1;
+  string expiration = 2;
+  int32 status = 3;
+  string message = 4;
+}

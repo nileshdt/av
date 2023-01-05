@@ -1,48 +1,46 @@
+// protos/user/user.proto
+
 syntax = "proto3";
-package users;
-service Users {
-  rpc Login (LoginReq) returns (LoginRsp) {}
-  rpc Register (RegisterReq) returns (RegisterRsp) {}
-  rpc Validate (ValidateReq) returns (ValidateRsp) {}
-}
-message User {
-  string username = 1;
-  string password = 2;
-  string email = 3;
-  string jwt_token = 4;
-  string expiration = 5;
+
+package demo_user;
+
+option go_package = "github.com/Joker666/microservice-demo/protos/user";
+
+service UserSvc {
+    rpc register (RegisterRequest) returns (UserResponse);
+    rpc login (LoginRequest) returns (UserResponse);
+    rpc verify (VerifyRequest) returns (VerifyResponse);
+    rpc getUser (GetUserRequest) returns (VerifyResponse);
 }
 
-message LoginReq {
-  string username = 1;
-  string password = 2;
+message VerifyRequest {
+    string token = 1;
 }
 
-message LoginRsp {
-  string jwt_token = 1;
-  string expiration = 2;
-  int32 status = 3;
-  string message = 4;
+message GetUserRequest {
+    string user_id = 1;
 }
 
-message RegisterReq {
-  string username = 1;
-  string password = 2;
-  string email = 3;
+message LoginRequest {
+    string email = 1;
+    string password = 2;
 }
 
-message RegisterRsp {
-  int32 status = 1;
-  string message = 2;
+message RegisterRequest {
+    string name = 1;
+    string email = 2;
+    string password = 3;
 }
-message ValidateReq {
-  string jwt_token = 1;
-  int32 status = 2;
-  string message = 3;
+
+message UserResponse {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string token = 4;
 }
-message ValidateRsp {
-  string jwt_token = 1;
-  string expiration = 2;
-  int32 status = 3;
-  string message = 4;
+
+message VerifyResponse {
+    string id = 1;
+    string name = 2;
+    string email = 3;
 }

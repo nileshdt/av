@@ -29,8 +29,22 @@ async def read_audits(user_id: str):
 
     async with auManager.open_channel() as usc:
         us = AuditService(usc)
-        print("get audits")
-    return us.getAudits(user_id)
+        res = await us.getAudits(user_id)
+
+        audits = []
+        for audit in res.audits:
+            audits.append({"_id": audit._id,
+                           "name": audit.name,
+                           "description": audit.description,
+                           "type": audit.type,
+                           "data": audit.data,
+                           "status": audit.status,
+                           "created_at": audit.created_at,
+                           "updated_at": audit.updated_at})
+        d_audits = dict(audits=audits)
+        m = Message(200,
+                    res.message, None, **d_audits)
+    return m.json()
 
 
 @router.get("/{audit_id}")
@@ -39,22 +53,19 @@ async def read_audit(audit_id: str):
         raise HTTPException(status_code=404, detail="Please provide audit id")
     async with auManager.open_channel() as usc:
         us = AuditService(usc)
-    print("get audit"+audit_id)
+
     res = await us.getAudit(audit_id)
-    print(111)
-    print(res)
-    print(res.status)
-    print(res.audit)
-    print(res.message)
-    print(type(res))
     aud = {"_id": res.audit._id,
            "name": res.audit.name,
            "description": res.audit.description,
            "type": res.audit.type,
            "data": res.audit.data,
+           "status": res.audit.status,
            "created_at": res.audit.created_at,
-           "updated_at": res.audit.updated_at}
-    m = Message(True, 200,
+           "created_by": res.audit.created_by,
+           "updated_at": res.audit.updated_at,
+           "updated_by": res.audit.updated_by}
+    m = Message(200,
                 res.message, None, **aud)
 
     return m.json()

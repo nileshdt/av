@@ -1,0 +1,31 @@
+syntax = "proto3";
+package products;
+service Products {
+  rpc GetProducts (GetProductsRequest) returns (GetProductsResponse) {}
+  rpc GetProduct (GetProductRequest) returns (GetProductResponse) {}
+  rpc CreateProduct (CreateProductRequest) returns (CreateProductResponse) {}
+  rpc UpdateProduct (UpdateProductRequest) returns (UpdateProductResponse) {}
+  rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse) {}
+  rpc GetProductCategories (GetProductCategoriesRequest) returns (GetProductCategoriesResponse) {} 
+  rpc GetProductCategory (GetProductCategoryRequest) returns (GetProductCategoryResponse) {}
+  rpc CreateProductCategory (CreateProductCategoryRequest) returns (CreateProductCategoryResponse) {}
+  rpc UpdateProductCategory (UpdateProductCategoryRequest) returns (UpdateProductCategoryResponse) {}
+  rpc DeleteProductCategory (DeleteProductCategoryRequest) returns (DeleteProductCategoryResponse) {}
+  
+}
+
+message Product {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string image = 4;
+  int64 price = 5;
+  int64 category_id = 6;
+  string created_at = 7;
+  string created_by = 8;
+  string updated_at = 8;
+  string updated_by = 9;
+
+
+  
+}

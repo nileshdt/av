@@ -3,18 +3,34 @@ from util.json import CustomEncoder
 from fastapi import Response
 
 
+def setDict(self, d):
+    for k, v in d.items():
+        if isinstance(v, dict):
+            for nested_key, nested_value in v.items():
+                if isinstance(nested_value, dict):
+                    for x_key, x_value in nested_value.items():
+                        self.__dict__[x_key] = x_value
+                else:
+                    self.__dict__[nested_key] = nested_value
+        else:
+            self.__dict__[k] = v
+
+
 class Message:
-    def __init__(self, status=False, statusid=0, message=None, token=None, **kwargs):
+    def __init__(self, statusid=0, message=None, token=None, **kwargs):
         """
         Create empty base message
         """
-        self.status = status
         self.statusid = statusid
         self.message = message
         self.token = token
-
-        for k, v in kwargs.items():
-            self.__dict__[k] = v
+        print(kwargs)
+        if 'list' in kwargs:
+            print("list")
+            self.__dict__ = kwargs
+            print(self.__dict__)
+        else:
+            setDict(self, kwargs)
 
     def __setattr__(self, key, value):
         """

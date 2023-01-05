@@ -89,16 +89,24 @@ class Audits(AuditsBase):
         return await stream.send_message(GetAuditResponse(status=200, message="Audit found", audit=audit))
 
     async def GetAudits(self, stream: Stream[GetAuditsRequest, GetAuditsResponse]) -> None:
-        print("get audits")
         request = await stream.recv_message()
+
         assert request is not None
 
         if not request.created_by:
-            await stream.send_message(GetAuditsResponse(status=400, message="created_by cannot be empty"))
-            # Update the age of the customer with name "John Smith"
-        audits = audits_collection.find({"created_by": request.created_by})
-        print(audits)
-        return await stream.send_message(GetAuditsResponse(status=200, message="Audits found", audits=audits))
+            return await stream.send_message(GetAuditsResponse(status=400, message="created_by cannot be empty"))
+        try:
+            audits = audits_collection.find({"created_by": request.created_by})
+        except Exception as e:
+            print(e)
+            return await stream.send_message(GetAuditsResponse(status=500, message="Internal error"))
+        if not audits:
+            return await stream.send_message(GetAuditsResponse(status=400, message="No audits found"))
+        audits_list = []
+        for audit in audits:
+            audits_list.append(Audit(_id=str(audit['_id']), name=str(audit['name']), description=str(audit['description']), type=str(audit['type']), status=str(audit['status']), data=str(
+                audit['data']), created_at=str(audit['created_at']), created_by=str(audit['created_by']), updated_at=None, updated_by=None))
+        return await stream.send_message(GetAuditsResponse(status=200, message="Audits found", audits=audits_list))
 
     async def DeleteAudit(self, stream: Stream[DeleteAuditRequest, DeleteAuditResponse]) -> None:
         print("delete audit")
