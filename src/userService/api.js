@@ -27,9 +27,9 @@ module.exports = class API {
         });
     }
     login = (call, callback) => {
-        const users = this.db.collection("users");
+        let users = this.db.collection("users");
         console.log(call.request.getEmail());
-        users = users.find({ email: call.request.getEmail() }).toArray().then(users => {
+        users = users.find({ email: call.request.getEmail() }).toArray().then(users=> {
             if (users.length > 0) {
                 let user = users[0];
                 bcrypt.compare(call.request.getPassword(), user.password, (err, result) => {
@@ -50,6 +50,8 @@ module.exports = class API {
         });
     }
     verify = (call, callback) => {
+        console.log("Verify");
+        console.log(call.request.getToken());
         let user = auth.verify(call.request.getToken());
         if (user) {
             let resp = new messages.UserResponse();
