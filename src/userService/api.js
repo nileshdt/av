@@ -26,6 +26,44 @@ module.exports = class API {
             });
         });
     }
+    login = (call, callback) => {
+        const users = this.db.collection("users");
+        console.log(call.request.getEmail());
+        users = users.find({ email: call.request.getEmail() }).toArray().then(users => {
+            if (users.length > 0) {
+                let user = users[0];
+                bcrypt.compare(call.request.getPassword(), user.password, (err, result) => {
+                    if (result) {
+                        let resp = new messages.UserResponse();
+                        resp.setId(user._id.toString());
+                        resp.setName(user.name);
+                        resp.setEmail(user.email);
+                        resp.setToken(auth.generateToken(user));
+                        callback(null, resp);
+                    } else {
+                        callback(new Error("Invalid credentials"), null);
+                    }
+                });
+            } else {
+                callback(new Error("Invalid credentials"), null);
+            }
+        });
+    }
+    verify = (call, callback) => {
+        let user = auth.verify(call.request.getToken());
+        if (user) {
+            let resp = new messages.UserResponse();
+            resp.setId(user._id.toString());
+            resp.setName(user.name);
+            resp.setEmail(user.email);
+            resp.setToken(auth.generateToken(user));
+            callback(null, resp);
+        } else {
+            callback(new Error("Invalid token"), null);
+        }
+    }
+
+
 
     // See the rest of the methods in
     // https://github.com/Joker666/microservice-demo/blob/main/userService/api.js
