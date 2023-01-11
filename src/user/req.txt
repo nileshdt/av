@@ -3,4 +3,14 @@ python3 -m grpc_tools.protoc -I../protos/user --python_out=. --pyi_out=. --grpc_
 
 pip install pipreqs
 
-pipreqs>requirements.txt -- force
+pipreqs > requirements.txt --force
+
+
+pip install PyJwt
+pip install grpclib
+pip install pymysql
+
+python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out=. user.proto
+
+
+python3 -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpclib_python_out=. project.proto

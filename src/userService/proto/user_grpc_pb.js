@@ -1,8 +1,5 @@
 // GENERATED CODE -- DO NOT EDIT!
 
-// Original file comments:
-// protos/user/user.proto
-//
 'use strict';
 var grpc = require('@grpc/grpc-js');
 var user_pb = require('./user_pb.js');

@@ -22,7 +22,7 @@ spec:
         - name: user
           image: 909007/user
           ports:  
-            - containerPort: 5000
+            - containerPort: 5001
           envFrom:  
             - configMapRef: 
                 name: user-configmap
