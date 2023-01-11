@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package demo_api;
+
+option go_package = "github.com/Joker666/microservice-demo/protos/api";
+
+import "google/api/annotations.proto";
+import "user/user.proto";
+import "project/project.proto";
+import "task/task.proto";
+
+service API {
+    // RegisterUser creates user
+    rpc RegisterUser (demo_user.RegisterRequest) returns (demo_user.UserResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/register"
+            body: "*"
+        };
+    }
+
+    // LoginUser logs in user
+    rpc LoginUser (demo_user.LoginRequest) returns (demo_user.UserResponse) {
+        option (google.api.http) = {
+            post: "/v1/user/login"
+            body: "*"
+        };
+    }
+
+    // CreateProject creates project
+    rpc CreateProject (demo_project.CreateProjectRequest) returns (demo_project.ProjectResponse) {
+        option (google.api.http) = {
+            post: "/v1/project/create"
+            body: "*"
+        };
+    }
+
+    // GetProject retrives a project
+    rpc GetProject (demo_project.GetProjectRequest) returns (demo_project.ProjectResponse) {
+        option (google.api.http) = {
+            get: "/v1/project/get/{project_id}"
+        };
+    }
+
+    // CreateTask creates task
+    rpc CreateTask (demo_task.CreateTaskRequest) returns (demo_task.TaskResponse) {
+        option (google.api.http) = {
+            post: "/v1/task/create"
+            body: "*"
+        };
+    }
+
+    // UpdateTask updates task
+    rpc UpdateTask (demo_task.UpdateTaskRequest) returns (demo_task.TaskResponse) {
+        option (google.api.http) = {
+            post: "/v1/task/update"
+            body: "*"
+        };
+    }
+
+    // ListTasks lists task
+    rpc ListTasks (demo_task.ListTasksRequest) returns (demo_task.ListTasksResponse) {
+        option (google.api.http) = {
+            get: "/v1/project/{project_id}/task/list/{assigned_user_id}/{tag_id}"
+            additional_bindings {
+                get: "/v1/project/{project_id}/task/list"
+            }
+            additional_bindings {
+                get: "/v1/project/{project_id}/task/list/{assigned_user_id}"
+            }
+        };
+    }
+}

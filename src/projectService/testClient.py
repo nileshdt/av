@@ -22,7 +22,7 @@ from grpclib.client import Channel
 
 
 async def main() -> None:
-    async with Channel('127.0.0.1', 50072) as channel:
+    async with Channel('127.0.0.1', 50052) as channel:
         stub = ProjectSvcStub(channel)
 
         response = await stub.getProject(message.GetProjectRequest(

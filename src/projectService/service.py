@@ -13,6 +13,8 @@ import api
 import model
 
 load_dotenv(verbose=True)
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
 engine = create_engine(os.getenv("DB_URI"), echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -37,7 +39,7 @@ async def connect_db():
         quit()
 
 
-async def main(*, host: str = '127.0.0.1', port: int = 50072) -> None:
+async def main(*, host: str = HOST, port: int = PORT) -> None:
     print("Starting server")
     await connect_db()
     print("Connected to DB")
