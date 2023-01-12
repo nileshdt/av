@@ -64,3 +64,16 @@ python3 -m grpc_tools.protoc -I proto --python_out=. -0-grpclib_python_out=./pro
 
 
 python3 -m grpc_tools.protoc -I proto --python_out=. -0-grpclib_python_out=. user.proto
+
+
+--- casandra
+brew install cassandra
+brew services restart cassandra
+
+cqlsh localhost
+describe keyspaces
+
+CREATE KEYSPACE product
+ WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1' : 1};
+
+
